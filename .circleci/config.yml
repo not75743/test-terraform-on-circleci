@@ -29,10 +29,6 @@ jobs:
           name: terraform
           command: |
             terraform apply -auto-approve tfapply
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
 workflows:
   version: 2
