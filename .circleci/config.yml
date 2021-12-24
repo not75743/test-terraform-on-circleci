@@ -30,6 +30,17 @@ jobs:
           command: |
             terraform apply -auto-approve tfapply
 
+  destroy:
+    docker:
+      - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: terraform
+          command: |
+            terraform apply -auto-approve destroy
+
 workflows:
   version: 2
   plan_approve_apply:
@@ -42,3 +53,11 @@ workflows:
       - apply:
           requires:
             - hold-apply
+
+      - hold-destroy:
+          type: approval
+          requires:
+            - plan-destroy
+      - destroy:
+          requires:
+            - hold-destroy
